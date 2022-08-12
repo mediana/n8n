@@ -36,7 +36,7 @@ export default Vue.extend({
 		RadioButton,
 	},
 	methods: {
-		onClick(value) {
+		onClick(value: string) {
 			if (this.disabled) {
 				return;
 			}

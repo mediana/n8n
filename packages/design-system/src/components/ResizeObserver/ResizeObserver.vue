@@ -16,7 +16,7 @@ export default Vue.extend({
 			default: true,
 		},
 		breakpoints: {
-			type: Array,
+			type: Array<{bp: string, width: number}>,
 			validator: (bps: Array<{bp: string, width: number}>) => {
 				return Array.isArray(bps) && bps.reduce(
 					(accu, {width, bp}) => accu && typeof width === 'number' && typeof bp === 'string'
@@ -24,7 +24,7 @@ export default Vue.extend({
 			},
 		},
 	},
-	data(): {observer: ResizeObserver | null, width: number | null} {
+	data(): {observer: ResizeObserver | null, bp: string | null} {
 		return {
 			observer: null,
 			bp: '',
@@ -35,7 +35,7 @@ export default Vue.extend({
 			return;
 		}
 
-		const bps = [...(this.breakpoints || [])].sort((a, b) => a.width - b.width);
+		const bps: Array<{bp: string, width: number}> = [...(this.breakpoints || [])].sort((a, b) => a.width - b.width);
 
 		const observer = new ResizeObserver((entries) => {
 			entries.forEach((entry) => {
@@ -57,7 +57,7 @@ export default Vue.extend({
 		this.$data.observer = observer;
 
 		if (this.$refs.root) {
-			observer.observe(this.$refs.root);
+			observer.observe(this.$refs.root as Element);
 		}
 	},
 	beforeDestroy() {

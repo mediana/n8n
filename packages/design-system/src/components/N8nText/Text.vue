@@ -38,12 +38,12 @@ export default Vue.extend({
 	},
 	computed: {
 		classes() {
-			const applied = [];
+			const applied: string[] = [];
 			if (this.align) {
 				applied.push(`align-${this.align}`);
 			}
 			if (this.color) {
-				applied.push(this.color);
+				applied.push(this.color.toString());
 			}
 
 			if (this.compact) {
@@ -54,7 +54,7 @@ export default Vue.extend({
 
 			applied.push(this.bold? 'bold': 'regular');
 
-			return applied.map((c) => this.$style[c]);
+			return applied.map((c: string) => (this.$style as { [key: string]: string })[c]);
 		}
 	},
 });
