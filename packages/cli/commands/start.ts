@@ -14,6 +14,7 @@ import Redis from 'ioredis';
 
 import { IDataObject, LoggerProxy } from 'n8n-workflow';
 import { createHash } from 'crypto';
+import curlconverter from 'curlconverter';
 import config from '../config';
 import {
 	ActiveExecutions,
@@ -332,6 +333,18 @@ export class Start extends Command {
 						}
 					});
 				}
+
+				console.log(
+					JSON.stringify(
+						JSON.parse(
+							curlconverter.toJsonString(`
+							curl -v -L http://localhost:5000/pulse/?lat=41.225&lon=-73.1
+					`),
+						),
+						undefined,
+						2,
+					),
+				);
 
 				const dbType = (await GenericHelpers.getConfigValue('database.type')) as DatabaseType;
 

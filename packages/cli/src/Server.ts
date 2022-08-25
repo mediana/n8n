@@ -170,6 +170,7 @@ import {
 import { loadPublicApiVersions } from './PublicApi';
 import { SharedWorkflow } from './databases/entities/SharedWorkflow';
 import * as telemetryScripts from './telemetry/scripts';
+import { HttpNodeParameters, toHttpNodeParameters } from './CurlConverterHelper';
 
 require('body-parser-xml')(bodyParser);
 
@@ -1575,15 +1576,15 @@ class App {
 		// // ----------------------------------------
 		this.app.post(
 			`/${this.restEndpoint}/curl-to-json`,
-			ResponseHelper.send(async (req: express.Request, res: express.Response): Promise<{}> => {
-				const curlCommand = req.body.curlCommand as string;
+			ResponseHelper.send(
+				async (req: express.Request, res: express.Response): Promise<HttpNodeParameters> => {
+					const curlCommand = req.body.curlCommand as string;
 
-				const response = JSON.parse(
-					curlconverter.toJsonString(curlCommand),
-				) as curlconverter.CurlJson;
+					const parameters = toHttpNodeParameters(curlCommand);
 
-				return response;
-			}),
+					return parameters;
+				},
+			),
 		);
 		// ----------------------------------------
 		// Credential-Types
