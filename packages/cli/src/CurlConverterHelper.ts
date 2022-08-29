@@ -159,6 +159,8 @@ const keyValueBodyToNodeParameters = (body: CurlJson['data']): Parameter[] | [] 
 export const toHttpNodeParameters = (curlCommand: string): HttpNodeParameters => {
 	const curlJson = curlToJson(curlCommand);
 
+	console.log(JSON.stringify(curlJson, undefined, 2));
+
 	const httpNodeParameters: HttpNodeParameters = {
 		url: curlJson.url,
 		requestMethod: curlJson.method.toUpperCase(),
@@ -189,12 +191,14 @@ export const toHttpNodeParameters = (curlCommand: string): HttpNodeParameters =>
 		Object.assign(httpNodeParameters, {
 			contentType: 'multipart-form-data',
 			sendBody: true,
-			specifyBody: 'keypair',
 			bodyParameters: {
-				parameters: keyValueBodyToNodeParameters(curlJson.data),
+				parameters: keyValueBodyToNodeParameters(curlJson.data).map((data) => ({
+					...data,
+					isFile: false,
+				})),
 			},
 		});
 	}
-	console.log(JSON.stringify(httpNodeParameters));
+	console.log(JSON.stringify(httpNodeParameters, undefined, 2));
 	return httpNodeParameters;
 };
